@@ -12,7 +12,7 @@ function magicTerminalOpen ( window ) {
   const name = window.app ().name (),
         title = window.title ();
 
-  if ( !/Terminal/.test ( name ) || false ) return;
+  if ( !/iTerm/.test ( name ) || false ) return;
 
   setFrame ( 'bottom-left', window );
 

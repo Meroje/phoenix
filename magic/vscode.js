@@ -9,7 +9,7 @@ function magicVSCodeOpen ( window ) {
 
   if ( !window.isNormal () || !window.isMain () ) return;
 
-  if ( !/Code/.test ( window.app ().name () ) ) return;
+  if ( !/Code|Sublime\ Text/.test ( window.app ().name () ) ) return;
 
   setFrame ( 'right', window );
 

@@ -5,8 +5,8 @@ require ( './magic/terminal.js' );
 
 /* LAUNCHERS */
 
-const launchChrome = `
-  tell application "Google Chrome"
+const launchSafari = `
+  tell application "Safari"
     make new window
     activate
   end tell
@@ -14,14 +14,14 @@ const launchChrome = `
 
 function launchDevTools () {
 
-  const chrome = Space.active ().windows ().find ( window => /Google Chrome/.test ( window.app ().name () ) );
+  const safari = Space.active ().windows ().find ( window => /Safari/.test ( window.app ().name () ) );
 
-  if ( !chrome ) return alert ( 'Chrome is not opened' );
+  if ( !safari ) return alert ( 'Safari is not opened' );
 
   osascript (`
-    tell application "Google Chrome" to activate
-    tell application "System Events" to tell process "Google Chrome"
-      click menu item "Developer Tools" of menu 1 of menu item "Developer" of menu 1 of menu bar item "View" of menu bar 1
+    tell application "Safari" to activate
+    tell application "System Events"
+      keystroke "i" using {option down, command down}
     end tell
   `);
 
@@ -32,7 +32,7 @@ const launchVSC = () => Task.run ( '/usr/local/bin/code', ['-n'] );
 const launchHyper = () => Task.run ( '/usr/local/bin/hyper' );
 
 const launchTerminal = `
-  tell application "Terminal"
+  tell application "iTerm2"
     do script ""
     activate
   end tell
@@ -78,15 +78,11 @@ function callbackHyper () {
 /* FOCUS */
 
 const focus = [
-  ['`', HYPER, ['Noty']],
-  ['c', HYPER, ['Google Chrome', false, /^(?!Developer Tools)/, launchChrome]],
-  ['d', HYPER, ['Google Chrome', true, /(Developer Tools)|(chrome-devtools)/, launchDevTools]],
-  ['v', HYPER, ['Code', false, false, launchVSC]],
-  // ['t', HYPER, ['Terminal', false, false, launchTerminal, callbackTerminal]], //FIXME: Ugly, but since `windowDidOpen` won't trigger, at least now it will behave as expected
-  ['t', HYPER, ['Hyper', false, false, launchHyper, callbackHyper]], //FIXME: Ugly, but since `windowDidOpen` won't trigger, at least now it will behave as expected
-  ['f', HYPER, ['Finder', false, false, launchFinder]],
-  ['g', HYPER, ['Tower']],
-  ['z', HYPER, ['Franz']]
+  ['c', HYPER, ['Safari', /^(?!Developer Tools)/, launchSafari]],
+  ['d', HYPER, ['Safari', /(Developer Tools)|(safari-devtools)/, launchDevTools]], //FIXME: If Hyper has been down for a while it will actually trigger Hyper+I
+  ['v', HYPER, ['Code', false, launchVSC]],
+  ['t', HYPER, ['Terminal', false, launchTerminal]],
+  ['f', HYPER, ['Finder', false, launchFinder]]
 ];
 
 setHandlers ( focusWindow, focus );
